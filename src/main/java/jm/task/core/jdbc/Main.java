@@ -8,10 +8,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-
-
-
-        final UserService userService = new UserServiceImpl();
+        UserService userService = new UserServiceImpl();
 
         userService.createUsersTable();
         for (int i = 0; i < 4; i++) {
@@ -21,6 +18,5 @@ public class Main {
         userList.forEach(System.out::println);
         userService.cleanUsersTable();
         userService.dropUsersTable();
-
     }
 }

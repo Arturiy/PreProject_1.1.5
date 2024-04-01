@@ -22,7 +22,13 @@ public class UserDaoJDBCImpl implements UserDao {
 
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(sql);
+            connection.commit();
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             throw new RuntimeException(e);
         }
     }
@@ -31,7 +37,13 @@ public class UserDaoJDBCImpl implements UserDao {
         String sql = "drop table if exists users";
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(sql);
+            connection.commit();
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             throw new RuntimeException(e);
         }
     }
@@ -43,7 +55,13 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.setString(2, lastName);
             preparedStatement.setByte(3, age);
             preparedStatement.executeUpdate();
+            connection.commit();
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             throw new RuntimeException(e);
         }
     }
@@ -53,7 +71,13 @@ public class UserDaoJDBCImpl implements UserDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
+            connection.commit();
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             throw new RuntimeException(e);
         }
     }
@@ -62,11 +86,32 @@ public class UserDaoJDBCImpl implements UserDao {
         List<User> userList = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement("select * from users")) {
             ResultSet resultSet = preparedStatement.executeQuery();
+            connection.commit();
             while (resultSet.next()) {
                 userList.add(mapUser(resultSet));
             }
             return userList;
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void cleanUsersTable() {
+        String sql = "delete from users";
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate(sql);
+            connection.commit();
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             throw new RuntimeException(e);
         }
     }
@@ -82,14 +127,5 @@ public class UserDaoJDBCImpl implements UserDao {
             throw new RuntimeException(e);
         }
         return user;
-    }
-
-    public void cleanUsersTable() {
-        String sql = "delete from users";
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(sql);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

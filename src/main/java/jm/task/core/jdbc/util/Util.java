@@ -29,6 +29,7 @@ public class Util {
             Class.forName(properties.getProperty("driver")); //Обратнаяя совместимость?
 
             connection = DriverManager.getConnection(properties.getProperty("url"), properties.getProperty("username"), properties.getProperty("password"));
+            connection.setAutoCommit(false);
             initDatabase();  // Инициальзируем базу данных на случай ее отсутствия
             return connection;
         } catch (IOException | SQLException | ClassNotFoundException e) {
