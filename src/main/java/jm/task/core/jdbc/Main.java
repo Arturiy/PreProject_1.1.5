@@ -9,7 +9,7 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
-        final UserService userService0 = new UserServiceImpl();
+
 
         final UserService userService = new UserServiceImpl();
 

@@ -23,7 +23,7 @@ public class Util {
     private static Connection createConnection() {
         Properties properties = new Properties();
 
-        try (FileReader fileReader = new FileReader(new File("src\\main\\resources\\database.properties"))) {
+        try (FileReader fileReader = new FileReader("src\\main\\resources\\database.properties")) {
             properties.load(fileReader);
 
             Class.forName(properties.getProperty("driver")); //Обратнаяя совместимость?
