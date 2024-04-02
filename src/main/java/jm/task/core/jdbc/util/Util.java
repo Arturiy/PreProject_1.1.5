@@ -1,12 +1,11 @@
 package jm.task.core.jdbc.util;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Properties;
 
 public class Util {
@@ -29,7 +28,6 @@ public class Util {
             Class.forName(properties.getProperty("driver")); //Обратнаяя совместимость?
 
             connection = DriverManager.getConnection(properties.getProperty("url"), properties.getProperty("username"), properties.getProperty("password"));
-            connection.setAutoCommit(false);
             initDatabase();  // Инициальзируем базу данных на случай ее отсутствия
             return connection;
         } catch (IOException | SQLException | ClassNotFoundException e) {
@@ -38,10 +36,9 @@ public class Util {
     }
 
     private static void initDatabase() {
-        try (Statement statement = connection.createStatement()) {
-            statement.addBatch("CREATE DATABASE IF NOT EXISTS kataWorkDB;");
-            statement.addBatch("USE kataWorkDB;");
-            statement.executeBatch();
+        try (PreparedStatement preparedStatement = connection.prepareStatement("CREATE DATABASE IF NOT EXISTS kataWorkDB;")) {
+            preparedStatement.addBatch("USE kataWorkDB;");
+            preparedStatement.executeBatch();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -19,31 +19,18 @@ public class UserDaoJDBCImpl implements UserDao {
                 lastName varchar(255) not null,
                 age int not null
                 )""";
-
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(sql);
-            connection.commit();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.executeUpdate(sql);
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
             throw new RuntimeException(e);
         }
     }
 
     public void dropUsersTable() {
         String sql = "drop table if exists users";
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(sql);
-            connection.commit();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.executeUpdate(sql);
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
             throw new RuntimeException(e);
         }
     }
@@ -55,13 +42,7 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.setString(2, lastName);
             preparedStatement.setByte(3, age);
             preparedStatement.executeUpdate();
-            connection.commit();
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
             throw new RuntimeException(e);
         }
     }
@@ -71,13 +52,7 @@ public class UserDaoJDBCImpl implements UserDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
-            connection.commit();
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
             throw new RuntimeException(e);
         }
     }
@@ -86,32 +61,20 @@ public class UserDaoJDBCImpl implements UserDao {
         List<User> userList = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement("select * from users")) {
             ResultSet resultSet = preparedStatement.executeQuery();
-            connection.commit();
             while (resultSet.next()) {
                 userList.add(mapUser(resultSet));
             }
             return userList;
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
             throw new RuntimeException(e);
         }
     }
 
     public void cleanUsersTable() {
         String sql = "delete from users";
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(sql);
-            connection.commit();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.executeUpdate(sql);
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
             throw new RuntimeException(e);
         }
     }
