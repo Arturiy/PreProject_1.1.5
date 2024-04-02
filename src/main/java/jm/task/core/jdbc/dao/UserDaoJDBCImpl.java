@@ -7,6 +7,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+// Убрал connection.setAutoCommit(false) и сопутсвующий код чтобы избежать вложенных блоков try catch
+
 public class UserDaoJDBCImpl implements UserDao {
     private final Connection connection = Util.getConnection();
 
