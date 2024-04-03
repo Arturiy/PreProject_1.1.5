@@ -9,10 +9,9 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         UserService userService = new UserServiceImpl();
-
         userService.createUsersTable();
         for (int i = 0; i < 4; i++) {
-            userService.saveUser("name" + i, "lastName" + i, (byte) (i+10));
+            userService.saveUser("name" + i, "lastName" + i, (byte) (i + 10));
         }
         List<User> userList = userService.getAllUsers();
         userList.forEach(System.out::println);
