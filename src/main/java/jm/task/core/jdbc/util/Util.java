@@ -4,6 +4,7 @@ import jm.task.core.jdbc.model.User;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
